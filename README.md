@@ -1,72 +1,134 @@
-## demo app - developing with Docker
+# 🚀 Final-DEPI-Project
 
-This demo app shows a simple user profile app set up using 
-- index.html with pure js and css styles
-- nodejs backend with express module
-- mongodb for data storage
+A cloud-ready web application built with Node.js and MongoDB, containerized using Docker and deployed on AWS EC2.  
+This project was created as part of the **Digital Egypt Pioneers Initiative (DEPI)** to demonstrate hands-on DevOps practices such as containerization, automation, and cloud deployment.
 
-All components are docker-based
+## 🔁 CI/CD Pipeline with Jenkins
 
-### With Docker
+This project includes a CI/CD pipeline configured via **Jenkins**.
 
-#### To start the application
+### ✅ Pipeline Features:
 
-Step 1: Create docker network
+- Auto-build on every code push (via GitHub Webhook)
+- Build a Docker image of the Node.js application
+- Push the Docker image to **Docker Hub**
+- Deploy the updated container to AWS EC2
 
-    docker network create mongo-network 
+### 🔧 Jenkins Components Used:
 
-Step 2: start mongodb 
+- `Jenkinsfile` for pipeline as code
+- GitHub Webhook trigger
+- Docker plugin for image build and push
+- SSH deployment to remote EC2 instance
 
-    docker run -d -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=password --name mongodb --net mongo-network mongo    
+> This automation ensures smooth, repeatable, and zero-downtime deployments with every update.
 
-Step 3: start mongo-express
-    
-    docker run -d -p 8081:8081 -e ME_CONFIG_MONGODB_ADMINUSERNAME=admin -e ME_CONFIG_MONGODB_ADMINPASSWORD=password --net mongo-network --name mongo-express -e ME_CONFIG_MONGODB_SERVER=mongodb mongo-express   
 
-_NOTE: creating docker-network in optional. You can start both containers in a default network. In this case, just emit `--net` flag in `docker run` command_
+## 🔧 Tech Stack
 
-Step 4: open mongo-express from browser
+- Node.js – Express.js backend  
+- MongoDB – NoSQL database  
+- Docker – Containerization of services  
+- Docker Compose – Service orchestration  
+- Jenkins – CI/CD pipeline automation  
+- Ansible – Infrastructure automation  
+- AWS EC2 – Cloud hosting
 
-    http://localhost:8081
 
-Step 5: create `user-account` _db_ and `users` _collection_ in mongo-express
+## 📦 Features
 
-Step 6: Start your nodejs application locally - go to `app` directory of project 
+- Fully containerized (Node.js + MongoDB)
+- Easily reproducible environment via Docker Compose
+- Automated provisioning and deployment with Ansible
+- Deployment to AWS EC2 Ubuntu instance
+- Modular and maintainable structure
 
-    cd app
-    npm install 
-    node server.js
-    
-Step 7: Access you nodejs application UI from browser
+## 📂 Project Structure
 
-    http://localhost:3000
+Final-DEPI-Project/
+├── app/                           # Node.js application code
+│   ├── server.js
+│   └── package.json
+├── Dockerfile                     # Docker image for Node.js app
+├── docker-compose.yml             # Defines app and MongoDB services
+├── ansible/
+│   ├── db-setup-deployment.yaml  # Ansible playbook to install MongoDB
+│   └── deploy-docker.yaml        # Ansible playbook to run Docker Compose
+├── hosts                          # Ansible inventory file
+└── README.md                      # Project documentation
 
-### With Docker Compose
+## 🧰 Prerequisites
 
-#### To start the application
+- AWS EC2 instance (Ubuntu-based)
+- SSH key pair to access EC2
+- Docker & Docker Compose (will be installed via Ansible)
+- Ansible installed on your local machine (for automation)
 
-Step 1: start mongodb and mongo-express
+## 🚀 How to Deploy
 
-    docker-compose -f docker-compose.yaml up
-    
-_You can access the mongo-express under localhost:8080 from your browser_
-    
-Step 2: in mongo-express UI - create a new database "my-db"
+### Step 1: Clone the repository
 
-Step 3: in mongo-express UI - create a new collection "users" in the database "my-db"       
-    
-Step 4: start node server 
+git clone https://github.com/AhMed-GhaNem25/Final-DEPI-Project.git
+cd Final-DEPI-Project
 
-    cd app
-    npm install
-    node server.js
-    
-Step 5: access the nodejs application from browser 
+### Step 2: Configure Ansible inventory
 
-    http://localhost:3000
+Edit the `hosts` file and replace with your actual EC2 IP and key path:
 
-#### To build a docker image from the application
+[app]
+your-ec2-public-ip ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/your-key.pem
 
-    docker build -t my-app:1.0 .       
-    
-The dot "." at the end of the command denotes location of the Dockerfile.
+### Step 3: Run Ansible playbooks
+
+Install MongoDB and deploy containers via Docker Compose:
+
+ansible-playbook -i hosts ansible/deploy-docker.yaml
+
+Ansible will:
+- Install Docker & Docker Compose
+- Clone the repo on the EC2
+- Deploy the app and MongoDB containers
+
+### Step 4: Access the Application
+
+Once deployed, open your browser and visit:
+
+http://<your-ec2-public-ip>:3000
+
+## 🐳 Running Locally with Docker Compose
+
+docker-compose up --build
+
+App will be available at:
+
+http://localhost:3000
+
+## 🛠 Optional: Run Without Docker (Dev Only)
+
+cd app
+npm install
+node server.js
+
+> Requires MongoDB installed locally on your machine
+
+## 🔐 Security Measures
+
+- EC2 instance secured via SSH key pair  
+- Docker Compose isolates services  
+- MongoDB is not exposed externally  
+- Only necessary ports (e.g. 22, 3000) are open in security group  
+- Ansible used with limited, secure access
+
+## 📜 License
+
+This project is licensed under the **MIT License**.  
+You are free to use, modify, and distribute this project.
+
+## 👨‍💻 Author
+
+Ahmed Ghanem  
+DevOps Engineer  
+📧 ahmedghanem.g23@gmail.com  
+🔗 GitHub: https://github.com/AhMed-GhaNem25
+
+> Built with ❤️ as part of the Digital Egypt Pioneers Initiative
