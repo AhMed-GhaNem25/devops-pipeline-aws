@@ -49,12 +49,18 @@ Final-DEPI-Project/
 ├── app/                           # Node.js application code
 │   ├── server.js
 │   └── package.json
+
 ├── Dockerfile                     # Docker image for Node.js app
+
 ├── docker-compose.yml             # Defines app and MongoDB services
+
 ├── ansible/
+
 │   ├── db-setup-deployment.yaml  # Ansible playbook to install MongoDB
+
 │   └── deploy-docker.yaml        # Ansible playbook to run Docker Compose
 ├── hosts                          # Ansible inventory file
+
 └── README.md                      # Project documentation
 
 ## 🧰 Prerequisites
@@ -93,7 +99,7 @@ Ansible will:
 
 Once deployed, open your browser and visit:
 
-http://<your-ec2-public-ip>:3000
+http://your-ec2-ip:3000
 
 ## 🐳 Running Locally with Docker Compose
 
@@ -119,16 +125,6 @@ node server.js
 - Only necessary ports (e.g. 22, 3000) are open in security group  
 - Ansible used with limited, secure access
 
-## 📜 License
 
-This project is licensed under the **MIT License**.  
-You are free to use, modify, and distribute this project.
-
-## 👨‍💻 Author
-
-Ahmed Ghanem  
-DevOps Engineer  
-📧 ahmedghanem.g23@gmail.com  
-🔗 GitHub: https://github.com/AhMed-GhaNem25
 
 > Built with ❤️ as part of the Digital Egypt Pioneers Initiative
