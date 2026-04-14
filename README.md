@@ -1,130 +1,167 @@
-# 🚀 Final-DEPI-Project
+# 🚀 Full DevOps Pipeline on AWS
 
-A cloud-ready web application built with Node.js and MongoDB, containerized using Docker and deployed on AWS EC2.  
-This project was created as part of the **Digital Egypt Pioneers Initiative (DEPI)** to demonstrate hands-on DevOps practices such as containerization, automation, and cloud deployment.
+> A production-style CI/CD pipeline that automatically builds, pushes, and deploys a Node.js + MongoDB application to AWS EC2 — triggered by every Git push.
+---
 
-## 🔁 CI/CD Pipeline with Jenkins
+## 📌 What This Project Does
 
-This project includes a CI/CD pipeline configured via **Jenkins**.
+Most Node.js apps stop at writing code. This project goes further — it automates the entire journey from **code commit to live deployment**:
 
-### ✅ Pipeline Features:
+1. Developer pushes code to GitHub
+2. Jenkins detects the push via Webhook and triggers the pipeline
+3. Docker image is built and pushed to Docker Hub
+4. Ansible provisions the AWS EC2 instance (installs Docker, sets up environment)
+5. Updated container is deployed automatically — zero manual steps
 
-- Auto-build on every code push (via GitHub Webhook)
-- Build a Docker image of the Node.js application
-- Push the Docker image to **Docker Hub**
-- Deploy the updated container to AWS EC2
+---
 
-### 🔧 Jenkins Components Used:
+## 🏗️ Architecture Overview
 
-- `Jenkinsfile` for pipeline as code
-- GitHub Webhook trigger
-- Docker plugin for image build and push
-- SSH deployment to remote EC2 instance
+```
+Developer
+    │
+    ▼
+GitHub (Push)
+    │
+    ▼ (Webhook)
+Jenkins CI/CD Pipeline
+    ├── Build Docker Image
+    ├── Push to Docker Hub
+    └── SSH → EC2 Instance
+              │
+              ▼
+         Ansible Playbook
+              ├── Install Docker
+              ├── Pull Image
+              └── Run Containers
+                    ├── Node.js App  :3000
+                    └── MongoDB      :27017
+```
 
-> This automation ensures smooth, repeatable, and zero-downtime deployments with every update.
-
+---
 
 ## 🔧 Tech Stack
 
-- Node.js – Express.js backend  
-- MongoDB – NoSQL database  
-- Docker – Containerization of services  
-- Docker Compose – Service orchestration  
-- Jenkins – CI/CD pipeline automation  
-- Ansible – Infrastructure automation  
-- AWS EC2 – Cloud hosting
+| Layer | Technology |
+|-------|-----------|
+| Application | Node.js + Express.js |
+| Database | MongoDB |
+| Containerization | Docker + Docker Compose |
+| CI/CD | Jenkins (Pipeline as Code) |
+| Infrastructure Automation | Ansible |
+| Cloud | AWS EC2 (Ubuntu) |
+| Orchestration (bonus) | Kubernetes manifests included |
 
+---
 
-## 📦 Features
+## ✅ Pipeline Features
 
-- Fully containerized (Node.js + MongoDB)
-- Easily reproducible environment via Docker Compose
-- Automated provisioning and deployment with Ansible
-- Deployment to AWS EC2 Ubuntu instance
-- Modular and maintainable structure
+- **Auto-trigger** on every push via GitHub Webhook
+- **Dockerized build** — consistent across all environments
+- **Docker Hub integration** — image versioning and storage
+- **Ansible automation** — no manual SSH setup needed
+- **Kubernetes-ready** — deployment and service manifests included for scaling
+
+---
 
 ## 📂 Project Structure
 
+```
 Final-DEPI-Project/
-├── app/                           # Node.js application code
-│   ├── server.js
+├── app/
+│   ├── server.js           # Express.js backend
 │   └── package.json
-
-├── Dockerfile                     # Docker image for Node.js app
-
-├── docker-compose.yml             # Defines app and MongoDB services
-
+├── Dockerfile              # Node.js app image
+├── docker-compose.yml      # App + MongoDB services
+├── Jenkinsfile             # Pipeline as code
 ├── ansible/
+│   ├── deploy-docker.yaml  # Install Docker + deploy containers
+│   └── db-setup.yaml       # MongoDB provisioning
+├── hosts                   # Ansible inventory
+├── app-deployment.yaml     # Kubernetes Deployment
+├── app-service.yaml        # Kubernetes Service
+└── README.md
+```
 
-│   ├── db-setup-deployment.yaml  # Ansible playbook to install MongoDB
-
-│   └── deploy-docker.yaml        # Ansible playbook to run Docker Compose
-├── hosts                          # Ansible inventory file
-
-└── README.md                      # Project documentation
-
-## 🧰 Prerequisites
-
-- AWS EC2 instance (Ubuntu-based)
-- SSH key pair to access EC2
-- Docker & Docker Compose (will be installed via Ansible)
-- Ansible installed on your local machine (for automation)
+---
 
 ## 🚀 How to Deploy
 
-### Step 1: Clone the repository
+### Prerequisites
+- AWS EC2 instance (Ubuntu 20.04+)
+- SSH key pair
+- Ansible installed locally
+- Jenkins server running (local or cloud)
 
+### Step 1 — Clone the repo
+```bash
 git clone https://github.com/AhMed-GhaNem25/Final-DEPI-Project.git
 cd Final-DEPI-Project
+```
 
-### Step 2: Configure Ansible inventory
-
-Edit the `hosts` file and replace with your actual EC2 IP and key path:
-
+### Step 2 — Configure Ansible inventory
+Edit `hosts`:
+```ini
 [app]
-your-ec2-public-ip ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/your-key.pem
+YOUR_EC2_PUBLIC_IP ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/your-key.pem
+```
 
-### Step 3: Run Ansible playbooks
-
-Install MongoDB and deploy containers via Docker Compose:
-
+### Step 3 — Run Ansible to provision and deploy
+```bash
 ansible-playbook -i hosts ansible/deploy-docker.yaml
+```
 
-Ansible will:
-- Install Docker & Docker Compose
-- Clone the repo on the EC2
-- Deploy the app and MongoDB containers
+### Step 4 — Access the app
+```
+http://YOUR_EC2_IP:3000
+```
 
-### Step 4: Access the Application
+---
 
-Once deployed, open your browser and visit:
+## 🐳 Run Locally with Docker Compose
 
-http://your-ec2-ip:3000
-
-## 🐳 Running Locally with Docker Compose
-
+```bash
 docker-compose up --build
+```
+App available at: `http://localhost:3000`
 
-App will be available at:
+---
 
-http://localhost:3000
+## 🔐 Security Notes
 
-## 🛠 Optional: Run Without Docker (Dev Only)
+- EC2 access restricted to SSH key pair only
+- MongoDB not exposed externally
+- Only ports 22 and 3000 open in security group
+- Services isolated via Docker Compose network
 
-cd app
-npm install
-node server.js
+---
 
-> Requires MongoDB installed locally on your machine
+## 📸 Screenshots
 
-## 🔐 Security Measures
+> *Coming soon — pipeline run, Docker Hub image, and live deployment*
 
-- EC2 instance secured via SSH key pair  
-- Docker Compose isolates services  
-- MongoDB is not exposed externally  
-- Only necessary ports (e.g. 22, 3000) are open in security group  
-- Ansible used with limited, secure access
+<!-- Add screenshots here after re-deployment:
+![Jenkins Pipeline]()
+![Docker Hub]()
+![Live App]()
+-->
 
+---
 
+## 🎓 Context
 
-> Built with ❤️ as part of the Digital Egypt Pioneers Initiative
+Built as the graduation project for the **Digital Egypt Pioneers Initiative (DEPI)** — a national program focused on practical tech skills.
+
+This project reflects real-world DevOps practices: infrastructure as code, automated deployments, and containerized applications.
+
+---
+
+## 📬 Contact
+
+**Ahmed Ghanem**
+- 🔗 [LinkedIn](https://linkedin.com/in/ghanem-g23/)
+- 💻 [GitHub](https://github.com/AhMed-GhaNem25)
+
+---
+
+*Built with ❤️ as part of DEPI — Digital Egypt Pioneers Initiative*
