@@ -72,7 +72,7 @@ Jenkins CI/CD Pipeline
 ## 📂 Project Structure
 
 ```
-Final-DEPI-Project/
+devops-pipeline-aws/
 ├── app/
 │   ├── server.js           # Express.js backend
 │   └── package.json
@@ -101,7 +101,7 @@ Final-DEPI-Project/
 ### Step 1 — Clone the repo
 ```bash
 git clone https://github.com/AhMed-GhaNem25/Final-DEPI-Project.git
-cd Final-DEPI-Project
+cd devops-pipeline-aws
 ```
 
 ### Step 2 — Configure Ansible inventory
