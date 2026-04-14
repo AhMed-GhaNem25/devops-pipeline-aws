@@ -2,6 +2,11 @@
 
 > A production-style CI/CD pipeline that automatically builds, pushes, and deploys a Node.js + MongoDB application to AWS EC2 — triggered by every Git push.
 ---
+![Tech Stack](https://img.shields.io/badge/Stack-Node.js%20%7C%20Docker%20%7C%20Jenkins%20%7C%20Ansible%20%7C%20AWS-blue)
+![CI/CD](https://img.shields.io/badge/CI%2FCD-Jenkins-orange)
+![License](https://img.shields.io/badge/License-MIT-green)
+
+---
 
 ## 📌 What This Project Does
 
@@ -133,18 +138,6 @@ App available at: `http://localhost:3000`
 - MongoDB not exposed externally
 - Only ports 22 and 3000 open in security group
 - Services isolated via Docker Compose network
-
----
-
-## 📸 Screenshots
-
-> *Coming soon — pipeline run, Docker Hub image, and live deployment*
-
-<!-- Add screenshots here after re-deployment:
-![Jenkins Pipeline]()
-![Docker Hub]()
-![Live App]()
--->
 
 ---
 
